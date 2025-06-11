@@ -14,6 +14,9 @@ importers:
       '@expo/vector-icons':
         specifier: ^14.1.0
         version: 14.1.0(expo-font@13.3.1(expo@53.0.11(@babel/core@7.26.10)(@expo/metro-runtime@5.0.4(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10)))(bufferutil@4.0.9)(react-native-webview@13.13.5(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)
+      '@react-native-google-signin/google-signin':
+        specifier: ^14.0.1
+        version: 14.0.1(expo@53.0.11(@babel/core@7.26.10)(@expo/metro-runtime@5.0.4(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10)))(bufferutil@4.0.9)(react-native-webview@13.13.5(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)(utf-8-validate@5.0.10))(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)
       '@react-navigation/bottom-tabs':
         specifier: ^7.3.10
         version: 7.3.10(@react-navigation/native@7.1.6(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native-safe-area-context@5.4.0(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native-screens@4.11.1(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)
@@ -1044,6 +1047,19 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':
+        optional: true
+
+  '@react-native-google-signin/google-signin@14.0.1':
+    resolution: {integrity: sha512-2f903eaHiv/Ob96vsWZitz+Z0k2J2W0/C7Ygrr6ejAT2JVzJCatmjF/eq62MWhuTNdU2WDX/oePxMbpQW6k2UA==}
+    peerDependencies:
+      expo: '>=52.0.40'
+      react: '*'
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      expo:
+        optional: true
+      react-dom:
         optional: true
 
   '@react-native/assets-registry@0.79.3':
@@ -6631,6 +6647,14 @@ snapshots:
       react: 19.0.0
     optionalDependencies:
       '@types/react': 19.0.14
+
+  '@react-native-google-signin/google-signin@14.0.1(expo@53.0.11(@babel/core@7.26.10)(@expo/metro-runtime@5.0.4(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10)))(bufferutil@4.0.9)(react-native-webview@13.13.5(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)(utf-8-validate@5.0.10))(react-dom@19.0.0(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
+      react-native: 0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10)
+    optionalDependencies:
+      expo: 53.0.11(@babel/core@7.26.10)(@expo/metro-runtime@5.0.4(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10)))(bufferutil@4.0.9)(react-native-webview@13.13.5(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0))(react-native@0.79.3(@babel/core@7.26.10)(@types/react@19.0.14)(bufferutil@4.0.9)(react@19.0.0)(utf-8-validate@5.0.10))(react@19.0.0)(utf-8-validate@5.0.10)
+      react-dom: 19.0.0(react@19.0.0)
 
   '@react-native/assets-registry@0.79.3': {}
 

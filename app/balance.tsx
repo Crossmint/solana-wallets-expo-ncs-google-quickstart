@@ -32,7 +32,6 @@ export default function Balance() {
       setBalances(balances);
       balancesCache = balances;
     } catch (error) {
-      console.error("Error fetching wallet balances:", error);
       Alert.alert("Error fetching wallet balances", `${error}`);
     }
   }, [wallet]);

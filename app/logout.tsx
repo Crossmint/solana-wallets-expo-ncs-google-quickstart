@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Text } from "react-native";
-import { useCrossmintAuth } from "@crossmint/client-sdk-react-native-ui";
 import { Ionicons } from "@expo/vector-icons";
+import { useGoogle } from "@/hooks/useGoogle";
 
 export default function Logout() {
-  const { logout } = useCrossmintAuth();
+  const { logout } = useGoogle();
   return (
     <TouchableOpacity style={styles.logoutButton} onPress={logout}>
       <Text style={styles.logoutText}>Logout</Text>

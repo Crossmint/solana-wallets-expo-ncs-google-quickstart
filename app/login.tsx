@@ -1,49 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   Image,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { useCrossmintAuth } from "@crossmint/client-sdk-react-native-ui";
-import { router } from "expo-router";
+import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import { useGoogle } from "../hooks/useGoogle";
+import { Redirect } from "expo-router";
 
 export default function Login() {
-  const { loginWithOAuth, createAuthSession, user, crossmintAuth } =
-    useCrossmintAuth();
-  const [email, setEmail] = useState("");
-  const [emailId, setEmailId] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [isPending, setIsPending] = useState(false);
+  const {
+    login,
+    isAuthenticated,
+    getOrCreateCrossmintWallet,
+    isLoading,
+    crossmintWallet,
+  } = useGoogle();
 
-  useEffect(() => {
-    if (user != null) {
-      router.push("/");
-    }
-  }, [user]);
-
-  const sendOtp = async () => {
-    setIsPending(true);
-    const res = await crossmintAuth?.sendEmailOtp(email);
-    setEmailId(res.emailId);
-    setOtpSent(true);
-    setIsPending(false);
-  };
-
-  const verifyOtp = async () => {
-    setIsPending(true);
-    const oneTimeSecret = await crossmintAuth?.confirmEmailOtp(
-      email,
-      emailId,
-      otp
-    );
-    await createAuthSession(oneTimeSecret);
-    setIsPending(false);
-  };
+  if (isAuthenticated && crossmintWallet != null) {
+    return <Redirect href="/" />;
+  }
 
   return (
     <View style={styles.content}>
@@ -56,87 +35,28 @@ export default function Login() {
       <Text style={styles.title}>Solana Wallets Quickstart</Text>
       <Text style={styles.subtitle}>The easiest way to build onchain</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="beatriz@paella.dev"
-        placeholderTextColor="#666"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        value={email}
-        onChangeText={setEmail}
-        editable={!otpSent}
-      />
-
-      {!otpSent ? (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={sendOtp}
-          disabled={isPending}
-        >
-          {isPending ? (
-            <ActivityIndicator color="#fff" size="small" />
-          ) : (
-            <Text style={styles.buttonText}>Sign in</Text>
-          )}
-        </TouchableOpacity>
-      ) : (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter OTP code"
-            placeholderTextColor="#666"
-            keyboardType="number-pad"
-            autoCapitalize="none"
-            autoCorrect={false}
-            value={otp}
-            onChangeText={setOtp}
-          />
-          <View style={styles.otpButtonsContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={verifyOtp}
-              disabled={isPending}
-            >
-              {isPending ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <Text style={styles.buttonText}>Verify OTP</Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonSecondary]}
-              onPress={() => setOtpSent(false)}
-              disabled={isPending}
-            >
-              <Text style={[styles.buttonText, styles.buttonTextSecondary]}>
-                Back
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
-
-      <View style={styles.orContainer}>
-        <View style={styles.orLine} />
-        <Text style={styles.orText}>OR</Text>
-        <View style={styles.orLine} />
-      </View>
-
-      <TouchableOpacity
-        style={[styles.button, styles.buttonSecondary]}
-        onPress={() => loginWithOAuth("google")}
-      >
-        <View style={styles.buttonIconContainer}>
-          <Image
-            source={require("../assets/images/google.png")}
-            style={styles.googleIcon}
-          />
+      {isAuthenticated ? (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={getOrCreateCrossmintWallet}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Get or Create Wallet</Text>
+            )}
+          </TouchableOpacity>
         </View>
-        <Text style={[styles.buttonText, styles.buttonTextSecondary]}>
-          Sign in with Google
-        </Text>
-      </TouchableOpacity>
+      ) : (
+        <GoogleSigninButton
+          style={{ width: 212, height: 48 }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={login}
+        />
+      )}
 
       <View style={styles.poweredByContainer}>
         <Image
@@ -149,6 +69,18 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: "#000",
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
   content: {
     backgroundColor: "#fff",
     flex: 1,
@@ -178,78 +110,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 40,
   },
-  input: {
-    width: "100%",
-    height: 48,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    marginBottom: 12,
-    fontSize: 16,
-    color: "#000",
-  },
-  orContainer: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 24,
-    gap: 16,
-  },
-  orLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#E0E0E0",
-  },
-  orText: {
-    fontSize: 14,
-    color: "#666",
-  },
-  poweredByContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 24,
-  },
-  googleIcon: {
-    width: 20,
-    height: 20,
-    resizeMode: "contain",
-  },
   poweredByIcon: {
     width: 400,
     height: 20,
     resizeMode: "contain",
   },
-  otpButtonsContainer: {
-    width: "100%",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    gap: 8,
-  },
-  button: {
-    flexDirection: "row",
+  poweredByContainer: {
+    position: "absolute",
+    bottom: 40,
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 14,
-    backgroundColor: "#05b959",
-    borderRadius: 8,
-    width: "100%",
-  },
-  buttonSecondary: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#E8E8E9",
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#fff",
-  },
-  buttonTextSecondary: {
-    color: "#000",
-  },
-  buttonIconContainer: {
-    marginRight: 8,
   },
 });

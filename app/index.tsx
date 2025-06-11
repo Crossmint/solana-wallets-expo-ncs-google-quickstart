@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,36 +9,18 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Redirect } from "expo-router";
-import {
-  useCrossmintAuth,
-  useWallet,
-} from "@crossmint/client-sdk-react-native-ui";
-import * as Linking from "expo-linking";
 import Balance from "./balance";
 import Transfer from "./transfer";
 import DelegatedSigners from "./delegated-signer";
 import Logout from "./logout";
 import Wallet from "./wallet";
+import { useGoogle } from "@/hooks/useGoogle";
 
 export default function Index() {
-  const { createAuthSession, status, user } = useCrossmintAuth();
-  const { getOrCreateWallet, wallet } = useWallet();
-  const url = Linking.useURL();
+  const { isLoading, isAuthenticated, crossmintWallet } = useGoogle();
   const [activeTab, setActiveTab] = useState<TabKey>("wallet");
 
-  useEffect(() => {
-    if (url != null) {
-      createAuthSession(url);
-    }
-  }, [url, createAuthSession]);
-
-  useEffect(() => {
-    if (wallet == null && user != null) {
-      getOrCreateWallet({ chain: "solana", signer: { type: "api-key" } });
-    }
-  }, [wallet, getOrCreateWallet, user]);
-
-  if (status === "initializing") {
+  if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
@@ -46,7 +28,7 @@ export default function Index() {
     );
   }
 
-  if (status === "logged-out") {
+  if (!isAuthenticated || crossmintWallet == null) {
     return <Redirect href="/login" />;
   }
 
@@ -155,7 +137,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     flexGrow: 1,
   },
-
   headerContainer: {
     paddingHorizontal: 20,
     paddingVertical: 16,
